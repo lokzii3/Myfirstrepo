@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mygame
+  annotations:
+    kubernetes.io/change-cause: "Changed to image lokiii2001/tic-tac-toe:latest and replicas to 4"
+  labels:
+    app: my-game
+spec:
+  selector:
+    matchLabels:
+      app: my-game
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: my-game
+    spec:
+      containers:
+        - name: my-game
+          image: lokiii2001/tic-tac-toe2:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: app_env
+              valueFrom:
+                configMapKeyRef:
+                  name: mygame-config
+                  key: APP_ENV
+                  
